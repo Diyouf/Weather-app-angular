@@ -17,19 +17,19 @@
               </button>
             </div>
             <div class="pt-4">
-              <h1 class="text-4xl font-medium text-center">Tirur</h1>
+              <h1 class="text-4xl font-medium text-center">{{weatherData.name}}</h1>
             </div>
   
             <div class="mt-4">
-              <h1 class="text-7xl font-extralight text-center">72°C</h1>
+              <h1 class="text-7xl font-extralight text-center">{{weatherData.main.temp | convert }}°C</h1>
             </div>
             <div class="mt-4">
-              <p class="text-center mb-3 text-2xl">Rainy</p>
-              <img class="w-fit h-fit" src="assets/maya.png" alt="">
+              <p class="text-center mb-3 text-2xl">{{weatherData.weather[0].description}}</p>
+              <img class="w-fit h-fit" [src]="weatherImageSrc" alt="">
             </div>
   
             <hr>
-            <p class="text-center text-2xl"><span class="font-semibold">Fri</span>,7:20 PM</p>
+            <p class="text-center text-2xl"><span class="font-semibold">{{Day}}</span>,{{Time}}</p>
   
           </div>
         </div>
@@ -103,27 +103,27 @@
               <div class="mt-4 grid md:grid-cols-3 gap-y-4 md:gap-y-12 gap-x-12">
                 <div class="px-4 py-6 rounded-xl w-full h-fit  border border-black">
                   <p class="text-center text-lg font-medium">Humidity</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">86</span>%</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.main.humidity}}</span>%</p>
                 </div>
                 <div class="px-4 py-6 rounded-xl w-full h-fit border border-black">
                   <p class="text-center text-lg font-medium">Wind Speed</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">3</span>m/s</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.wind.speed}}</span>m/s</p>
                 </div>
                 <div class="px-4 py-6 rounded-xl w-full h-fit  border border-black">
                   <p class="text-center text-lg font-medium">Feels Like</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">86</span>℃</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.main.feels_like | convert}}</span>℃</p>
                 </div>
                 <div class="px-4 py-6 rounded-xl w-full h-fit  border border-black">
                   <p class="text-center text-lg font-medium">UV Index</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">86</span>nm</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.main.grnd_level}}</span>nm</p>
                 </div>
                 <div class="px-4 py-6 rounded-xl w-full h-fit  border border-black">
                   <p class="text-center text-lg font-medium">Wind Direction</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">86</span>°</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.wind.deg}}</span>°</p>
                 </div>
                 <div class="px-4 py-6 rounded-xl w-full h-fit  border border-black">
                   <p class="text-center text-lg font-medium">Pressure</p>
-                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">86</span>hPA</p>
+                  <p class="text-center mt-2 font-light"><span class="text-6xl mt-2">{{weatherData.main.pressure}}</span>hPA</p>
                 </div>
               </div>
             </div>
