@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Weatherdata } from 'src/app/models/weather.model';
 import { WeatherServiceService } from 'src/app/service/weather-service.service';
 
@@ -9,29 +10,42 @@ import { WeatherServiceService } from 'src/app/service/weather-service.service';
 })
 export class WeatherComponent implements OnInit{
 
-  constructor(private _weatherAppService : WeatherServiceService){}
+  constructor(private _weatherAppService : WeatherServiceService,private _fb:FormBuilder){}
   weatherData!:Weatherdata
   dateAndDay!:Date 
   Day!:string
   Time!:string
   temperature!:number
+  dailyTemperatures: { dateKey: string; dailyTemp: number }[] = [];
+
+  city = this._fb.group({
+    name : ['']
+  })
+
 
   ngOnInit(): void {
-  
-    this._weatherAppService.getWeather('Dubai').subscribe(
-      (res) => {
-        this.weatherData = res;
-        this.temperature = (res.main.temp - 273.15)
-        const timezoneOffsetSeconds = this.weatherData.timezone;
-        const currentUTCTimestampMilliseconds = Date.now();
-        const localTimestampMilliseconds = currentUTCTimestampMilliseconds + (timezoneOffsetSeconds);
-        this.dateAndDay = new Date(localTimestampMilliseconds);
-        this.formatDate(this.dateAndDay);
-      },
-      (error) => {
-        console.error('Error fetching weather data:', error);
-      }
-    );
+    this.city.get('name')!.setValue('Kochi');
+    this.onSubmit()
+ }
+
+ onSubmit(){
+  this._weatherAppService.getWeather(this.city.value.name as string).subscribe(
+    (res) => {
+      this.weatherData = res;              
+      this.temperature = (res.list[0].main.temp - 273.15)
+      const timezoneOffsetSeconds = this.weatherData.city.timezone;
+      const currentUTCTimestampMilliseconds = Date.now();
+      const localTimestampMilliseconds = currentUTCTimestampMilliseconds + (timezoneOffsetSeconds);
+      this.dateAndDay = new Date(localTimestampMilliseconds);
+      this.formatDate(this.dateAndDay);
+      this.dailyTemperatures = []
+      this.calculateDailyTemperatures()
+      
+    },
+    (error) => {
+      console.error('Error fetching weather data:', error);
+    }
+  );
  }
 
    formatDate(inputDate:Date) {
@@ -62,8 +76,30 @@ export class WeatherComponent implements OnInit{
   get weatherImageSrc(): string {
     return `assets/${this.weatherCondition}.png`;
   }
- 
+
+
+  calculateDailyTemperatures() {
+    const temperatureMap = new Map<string, number>(); // Change the map value type to number
   
+    for (const weatherEntry of this.weatherData.list) {
+      const dateKey = weatherEntry.dt_txt.split(' ')[0]; // Extract date part
+      const temperature = weatherEntry.main.temp;
   
+      // Check if the entry exists, if not, create it
+      if (!temperatureMap.has(dateKey)) {
+        temperatureMap.set(dateKey, temperature);
+      }
+    }
   
+    temperatureMap.forEach((temperature, dateKey) => {
+      this.dailyTemperatures.push({ dateKey, dailyTemp: temperature }); // Use dailyTemp instead of dailyAvgTemp
+    });
+  }
+  
+
 }
+
+ 
+
+
+
