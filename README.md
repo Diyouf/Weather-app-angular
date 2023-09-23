@@ -1,6 +1,6 @@
-# Live Review 
+# Live preview 
 
-weatherapp-ng.netlify.app
+https://weatherapp-ng.netlify.app
 
 # WeatherApp
 
